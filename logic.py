@@ -24,6 +24,12 @@ class EventLogic:
 
     def create(self, event: Event) -> str:
         self._validate_note(event)
+
+        events = self.list()
+        for existing_event in events:
+            if existing_event.date == event.date:
+                raise LogicException(f"Event on date {event.date} is already exists")
+
         try:
             return self._event_db.create(event)
         except Exception as ex:
